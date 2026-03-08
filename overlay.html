@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AQW Overlay</title>
+    <style>
+      :root {
+        --gold-1: #f7d88a;
+        --gold-2: #c89b3c;
+        --blue-1: #8fd3ff;
+        --blue-2: #4aa9ff;
+        --red-1: #ff9b9b;
+        --red-2: #c94d4d;
+        --panel-1: rgba(8, 11, 19, 0.92);
+        --panel-2: rgba(18, 24, 39, 0.9);
+        --text-1: #f5efe0;
+        --text-2: #aeb8d0;
+        --success: #7fe2a4;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        overflow: hidden;
+      }
+
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .overlay-shell {
+        width: 320px;
+        border-radius: 18px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 16%),
+          linear-gradient(180deg, rgba(10, 13, 22, 0.96), rgba(7, 10, 17, 0.96));
+        border: 1px solid rgba(255, 224, 158, 0.18);
+        box-shadow:
+          0 16px 35px rgba(0, 0, 0, 0.45),
+          0 0 22px rgba(74, 169, 255, 0.15),
+          0 0 20px rgba(200, 155, 60, 0.12);
+        overflow: hidden;
+        -webkit-app-region: drag;
+      }
+
+      .overlay-shell::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 16px 12px;
+        background:
+          linear-gradient(180deg, rgba(255, 216, 138, 0.08), transparent 70%),
+          linear-gradient(90deg, rgba(74, 169, 255, 0.08), transparent 55%);
+        border-bottom: 1px solid rgba(255, 224, 158, 0.08);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .crest {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        font-size: 14px;
+        font-weight: 800;
+        color: #fff7dc;
+        background:
+          radial-gradient(
+            circle at 30% 30%,
+            rgba(255, 228, 153, 0.4),
+            transparent 30%
+          ),
+          linear-gradient(145deg, #1c2336, #0d111c 60%);
+        border: 1px solid rgba(255, 224, 158, 0.2);
+        box-shadow: inset 0 0 10px rgba(74, 169, 255, 0.08);
+      }
+
+      .titles h1 {
+        margin: 0;
+        font-size: 14px;
+        color: var(--gold-1);
+        text-transform: uppercase;
+        letter-spacing: 1.4px;
+      }
+
+      .titles p {
+        margin: 2px 0 0;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #7f8aa5;
+      }
+
+      .status-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: linear-gradient(
+          180deg,
+          rgba(16, 21, 35, 0.95),
+          rgba(9, 13, 21, 0.95)
+        );
+        border: 1px solid rgba(92, 110, 149, 0.22);
+        color: var(--text-2);
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #7a869d;
+        box-shadow: 0 0 10px rgba(122, 134, 157, 0.45);
+      }
+
+      .status-wrap.running {
+        color: #ecfff4;
+        border-color: rgba(127, 226, 164, 0.28);
+        box-shadow: 0 0 16px rgba(127, 226, 164, 0.1);
+      }
+
+      .status-wrap.running .status-dot {
+        background: var(--success);
+        box-shadow: 0 0 12px rgba(127, 226, 164, 0.65);
+      }
+
+      .body {
+        padding: 16px;
+      }
+
+      .mini-panel {
+        padding: 14px;
+        border-radius: 14px;
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(74, 169, 255, 0.08),
+            transparent 45%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(18, 24, 39, 0.96),
+            rgba(10, 14, 24, 0.96)
+          );
+        border: 1px solid rgba(255, 224, 158, 0.08);
+      }
+
+      .mini-panel-title {
+        margin: 0 0 12px;
+        font-size: 11px;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+        color: var(--blue-1);
+        font-weight: 800;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 10px;
+      }
+
+      .aqw-btn {
+        -webkit-app-region: no-drag;
+        flex: 1;
+        height: 44px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        color: #fff8e9;
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1.1px;
+        transition:
+          transform 0.15s ease,
+          filter 0.15s ease;
+      }
+
+      .aqw-btn:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.04);
+      }
+
+      .aqw-btn:active {
+        transform: translateY(1px) scale(0.995);
+      }
+
+      .aqw-btn.start {
+        background:
+          linear-gradient(180deg, rgba(130, 206, 255, 0.24), transparent 24%),
+          linear-gradient(180deg, #245fa0, #153454 60%, #0d2239);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.12),
+          0 8px 16px rgba(21, 52, 84, 0.35),
+          0 0 14px rgba(74, 169, 255, 0.18);
+      }
+
+      .aqw-btn.stop {
+        background:
+          linear-gradient(180deg, rgba(255, 180, 180, 0.16), transparent 24%),
+          linear-gradient(180deg, #8a2e2e, #5c1c1c 60%, #341111);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.1),
+          0 8px 16px rgba(92, 28, 28, 0.35),
+          0 0 14px rgba(201, 77, 77, 0.14);
+      }
+
+      .footer {
+        margin-top: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #7f8aa5;
+        font-size: 11px;
+      }
+
+      .drag-hint {
+        opacity: 0.9;
+      }
+
+      .state-text strong {
+        color: var(--gold-1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="overlay-shell">
+      <div class="header">
+        <div class="brand">
+          <div class="crest">AQ</div>
+          <div class="titles">
+            <h1>AQW Overlay</h1>
+            <p>Floating control panel</p>
+          </div>
+        </div>
+
+        <div id="statusBadge" class="status-wrap">
+          <span class="status-dot"></span>
+          <span id="statusText">Stopped</span>
+        </div>
+      </div>
+
+      <div class="body">
+        <div class="mini-panel">
+          <p class="mini-panel-title">Quick Controls</p>
+
+          <div class="buttons">
+            <button id="startBtn" class="aqw-btn start">Start</button>
+            <button id="stopBtn" class="aqw-btn stop">Stop</button>
+          </div>
+
+          <div class="footer">
+            <span class="drag-hint">Drag panel anywhere</span>
+            <span class="state-text"
+              >State: <strong id="stateLabel">Idle</strong></span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="overlay.js"></script>
+  </body>
+</html>
