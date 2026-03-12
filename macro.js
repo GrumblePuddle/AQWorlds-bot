@@ -13,7 +13,7 @@ function sleep(ms) {
 }
 
 function randomDelay() {
-  return 1500 + Math.random() * 500;
+  return 1000 + Math.random() * 500;
 }
 
 async function tapKey(key) {
